@@ -1,0 +1,76 @@
+version: "3.9"
+
+services:
+  # ========== 后端 Spring Boot ==========
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: yu-ai-agent-backend
+    restart: unless-stopped
+    environment:
+      # 必填：DashScope API Key（从阿里云百炼获取）
+      - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
+      # 必填：PostgreSQL 数据库连接（可用阿里云 RDS 或容器内 PG）
+      - DB_HOST=${DB_HOST:-db}
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_NAME=${DB_NAME:-yu_ai_agent}
+      - DB_USERNAME=${DB_USERNAME:-my_user}
+      - DB_PASSWORD=${DB_PASSWORD}
+      # Spring 激活 prod 配置
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - "127.0.0.1:8123:8123"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8123/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  # ========== 前端 Nginx ==========
+  frontend:
+    build:
+      context: ./xiaochen-ai-agent-frontend
+      dockerfile: Dockerfile
+    container_name: yu-ai-agent-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  # ========== PostgreSQL 数据库（可选：已有云 RDS 可注释掉）==========
+  db:
+    image: pgvector/pgvector:pg17
+    container_name: yu-ai-agent-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${DB_USERNAME:-my_user}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME:-yu_ai_agent}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-my_user} -d ${DB_NAME:-yu_ai_agent}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+volumes:
+  pgdata:
+
+networks:
+  app-network:
+    driver: bridge

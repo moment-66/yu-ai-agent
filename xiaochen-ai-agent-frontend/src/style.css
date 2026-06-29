@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #app {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background-color: #f8fafc;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========== 自定义滚动条 ========== */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 5px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* ========== 消息内容样式 ========== */
+.message-content {
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.75;
+}
+
+/* AI 消息强制左对齐 */
+.ai-message {
+  text-align: left;
+}
+
+/* 用户消息右对齐 */
+.user-message {
+  text-align: right;
+}
+
+/* ========== 消息气泡动画 ========== */
+.message-bubble {
+  animation: messageBubbleIn 0.25s ease-out;
+}
+@keyframes messageBubbleIn {
+  from { opacity: 0; transform: scale(0.95) translateY(4px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ========== 页面渐入动画 ========== */
+.fade-in {
+  animation: fadeIn 0.35s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== 卡片悬浮效果 ========== */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px -12px rgba(0, 0, 0, 0.15);
+}
+
+/* ========== Loading 脉冲 ========== */
+@keyframes pulse-dot {
+  0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+  40% { opacity: 1; transform: scale(1); }
+}
+.typing-dot {
+  animation: pulse-dot 1.4s infinite both;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* ========== 输入框自适应高度 ========== */
+textarea.chat-input {
+  min-height: 24px;
+  max-height: 120px;
+  font-family: inherit;
+  line-height: 1.6;
+}
+textarea.chat-input::placeholder {
+  color: #9ca3af;
+}
+
+/* ========== 响应式容器 ========== */
+@media (max-width: 640px) {
+  .mobile-container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  .mobile-message-bubble {
+    max-width: 85% !important;
+  }
+}
+
+/* ========== 平板适配 ========== */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .tablet-container {
+    max-width: 92%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .tablet-message-bubble {
+    max-width: 72% !important;
+  }
+}
