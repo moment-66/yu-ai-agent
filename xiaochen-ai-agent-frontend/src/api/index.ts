@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const baseURL = '/api'
+// 开发环境用 Vite proxy（相对路径），生产环境用完整后端地址
+const baseURL = import.meta.env.VITE_API_BASE_URL || '/api'
 
 const api = axios.create({
   baseURL,

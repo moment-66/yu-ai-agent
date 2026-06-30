@@ -1,17 +1,21 @@
-# application-prod.yml —— 生产环境配置
+# application-prod.yml —— 生产环境配置（Render 免费层，无需 PostgreSQL）
 spring:
   ai:
     dashscope:
       api-key: ${DASHSCOPE_API_KEY}
-  datasource:
-    url: jdbc:postgresql://${DB_HOST}:${DB_PORT:5432}/${DB_NAME:yu_ai_agent}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+  # 禁用数据源自动配置（Render 免费层不提供 PostgreSQL）
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
 
 server:
   port: 8123
+  servlet:
+    context-path: /api
 
 # 生产环境关闭调试日志
 logging:
   level:
+    root: INFO
     org.springframework.ai: INFO
