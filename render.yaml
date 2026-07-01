@@ -30,7 +30,12 @@ services:
     buildCommand: npm install && npm run build
     publishPath: dist
     plan: free
+    routes:
+      # Vue Router History 模式：所有路径重写到 index.html
+      - type: rewrite
+        source: /*
+        destination: /index.html
     envVars:
-      # 部署后在此填入后端实际地址（如 https://yu-ai-agent-backend.onrender.com/api）
+      # 部署后填入后端实际地址（如 https://yu-ai-agent-backend.onrender.com/api）
       - key: VITE_API_BASE_URL
         sync: false

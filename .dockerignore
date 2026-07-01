@@ -1,0 +1,29 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.idea
+.vscode
+*.iml
+
+# Maven build output (会重新构建)
+target/
+
+# Frontend
+xiaochen-ai-agent-frontend/node_modules/
+xiaochen-ai-agent-frontend/dist/
+xiaochen-ai-agent-frontend/.vite/
+
+# Docker
+docker-compose.yml
+.dockerignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp
+tmp/
+*.log
